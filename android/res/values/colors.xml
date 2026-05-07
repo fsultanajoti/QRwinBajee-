@@ -1,1 +1,5 @@
-
+<resources>
+    <color name="purple">#6600ff</color>
+    <color name="pink">#ff00cc</color>
+    <color name="black">#000000</color>
+</resources>
