@@ -2,63 +2,106 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>QRwinBajee Admin</title>
+<title>QRwinBajee Admin Panel</title>
 
 <style>
 body {
   margin: 0;
-  background: radial-gradient(circle, #1a002b, #000);
-  color: white;
   font-family: Arial;
+  background: #0b0014;
+  color: white;
   text-align: center;
 }
 
+header {
+  padding: 20px;
+  background: #1a002b;
+  border-bottom: 2px solid purple;
+}
+
 .container {
-  margin-top: 120px;
+  margin-top: 30px;
 }
 
-h1 {
-  font-size: 32px;
-  margin-bottom: 10px;
+.card {
+  background: #140020;
+  margin: 20px auto;
+  padding: 20px;
+  width: 300px;
+  border: 1px solid purple;
+  border-radius: 12px;
+  box-shadow: 0 0 10px purple;
 }
 
-p {
-  opacity: 0.7;
+input[type="range"] {
+  width: 100%;
 }
 
 button {
-  margin-top: 20px;
-  padding: 15px 40px;
-  font-size: 18px;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background: purple;
   border: none;
-  border-radius: 12px;
-  background: linear-gradient(45deg, #ff00cc, #6600ff);
   color: white;
   cursor: pointer;
-  box-shadow: 0 0 15px purple;
-}
-
-button:active {
-  transform: scale(0.95);
+  border-radius: 8px;
 }
 </style>
-
 </head>
 
 <body>
 
+<header>
+  <h1>🔐 QRwinBajee Admin Panel</h1>
+</header>
+
 <div class="container">
 
-  <h1>🔐 QRwinBajee ADMIN PANEL</h1>
-  <p>Control your Casino System</p>
+  <div class="card">
+    <h2>🎰 RTP Control</h2>
 
-  <button onclick="goLogin()">ENTER ADMIN</button>
+    <p>Return To Player: <span id="rtpValue">50</span>%</p>
+
+    <input type="range" min="1" max="95" value="50" id="rtp">
+
+    <button onclick="saveRTP()">SAVE RTP</button>
+  </div>
+
+  <div class="card">
+    <h2>📊 System Stats</h2>
+    <p>Total Spins: <span id="spins">0</span></p>
+    <p>Total Wins: <span id="wins">0</span></p>
+    <p>Total Loss: <span id="loss">0</span></p>
+  </div>
 
 </div>
 
 <script>
-function goLogin(){
-  window.location.href = "login.html";
+let rtp = document.getElementById("rtp");
+let rtpValue = document.getElementById("rtpValue");
+
+rtp.oninput = () => {
+  rtpValue.innerText = rtp.value;
+};
+
+// demo stats
+let spins = 0;
+let wins = 0;
+let loss = 0;
+
+function updateStats(s, w, l){
+  spins += s;
+  wins += w;
+  loss += l;
+
+  document.getElementById("spins").innerText = spins;
+  document.getElementById("wins").innerText = wins;
+  document.getElementById("loss").innerText = loss;
+}
+
+function saveRTP(){
+  localStorage.setItem("RTP", rtp.value);
+  alert("RTP Saved: " + rtp.value + "%");
 }
 </script>
 
