@@ -1,1 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Jackpot Saga PRO Engine</title>
 
+<style>
+body {
+  margin: 0;
+  background: radial-gradient(circle, #1a002b, #000);
+  color: white;
+  font-family: Arial;
+  text-align: center;
+  padding-top: 50px;
+}
+
+h1 {
+  margin-bottom: 10px;
+}
+
+.slot {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 30px 0;
+}
+
+.reel {
+  width: 90px;
+  height: 90px;
+  font-size: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: black;
+  border: 2px solid purple;
+  border-radius: 12px;
+  box-shadow: 0 0 20px purple;
+  overflow: hidden;
+}
+
+.reel span {
+  display: block;
+  transition: transform 0.1s;
+}
+
+#result {
+  font-size: 24px;
+  margin: 20px;
+  font-weight: bold;
+}
+
+#balance {
+  font-size: 20px;
+  color: gold;
+  margin-bottom: 20px;
+}
+
+button {
+  padding: 15px 40px;
+  font-size: 20px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(45deg, #ff00cc, #6600ff);
+  color: white;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎰 Jackpot Saga PRO Engine</h1>
+
+<div class="slot">
+  <div class="reel"><span id="r1">🍒</span></div>
+  <div class="reel"><span id="r2">🍋</span></div>
+  <div class="reel"><span id="r3">🔔</span></div>
+</div>
+
+<div id="result">READY</div>
+<div id="balance">1000</div>
+
+<button onclick="spin()">SPIN 🎰</button>
+
+<!-- 🎧 SOUNDS -->
+<audio id="spinSound" src="sounds/spin.mp3"></audio>
+<audio id="winSound" src="sounds/win.mp3"></audio>
+<audio id="jackpotSound" src="sounds/jackpot.mp3"></audio>
+
+<script>
+const SYMBOLS = ["🍒","🍋","🔔","💎","7️⃣","🍉"];
+
+// 🎚 weighted system
+function weighted() {
+  const map = [
+    {s:"🍒", w:30},
+    {s:"🍋", w:25},
+    {s:"🔔", w:20},
+    {s:"🍉", w:15},
+    {s:"7️⃣", w:7},
+    {s:"💎", w:3}
+  ];
+
+  let total = map.reduce((a,b)=>a+b.w,0);
+  let r = Math.random()*total;
+
+  for(let i of map){
+    if(r < i.w) return i.s;
+    r -= i.w;
+  }
+  return "🍒";
+}
+
+// 🎧 sound
+function play(id){
+  const a = document.getElementById(id);
+  if(a){ a.currentTime=0; a.play().catch(()=>{}); }
+}
+
+// 🎰 spin engine
+let spinning = false;
+
+function spin(){
+  if(spinning) return;
+  spinning = true;
+
+  document.getElementById("result").innerText = "SPINNING...";
+  play("spinSound");
+
+  let speed = 50;
+  let count = 0;
+
+  const interval = setInterval(()=>{
+
+    document.getElementById("r1").innerText = weighted();
+    document.getElementById("r2").innerText = weighted();
+    document.getElementById("r3").innerText = weighted();
+
+    count++;
+
+    // slow down effect
+    if(count > 10) speed = 100;
+    if(count > 18) speed = 150;
+
+    if(count > 25){
+      clearInterval(interval);
+      finish();
+    }
+
+  }, speed);
+}
+
+// 🎯 finish result
+function finish(){
+
+  const r1 = weighted();
+  const r2 = weighted();
+  const r3 = weighted();
+
+  document.getElementById("r1").innerText = r1;
+  document.getElementById("r2").innerText = r2;
+  document.getElementById("r3").innerText = r3;
+
+  const result = check(r1,r2,r3);
+
+  let bal = parseInt(document.getElementById("balance").innerText);
+
+  if(result === "JACKPOT"){
+    document.getElementById("result").innerText = "💎 JACKPOT!";
+    bal += 2000;
+    play("jackpotSound");
+  }
+  else if(result === "WIN"){
+    document.getElementById("result").innerText = "🔥 WIN!";
+    bal += 300;
+    play("winSound");
+  }
+  else{
+    document.getElementById("result").innerText = "❌ LOSE";
+    bal -= 50;
+  }
+
+  document.getElementById("balance").innerText = bal;
+
+  spinning = false;
+}
+
+// 🎯 win logic
+function check(a,b,c){
+  if(a===b && b===c){
+    if(a==="💎") return "JACKPOT";
+    return "WIN";
+  }
+  if(a===b || b===c || a===c) return "WIN";
+  return "LOSE";
+}
+</script>
+
+</body>
+</html>
