@@ -69,95 +69,29 @@ function generateReels() {
   ];
 }
 
-// 🎯 CHECK WIN LOGIC
-function checkWin(r) {
-  if (r[0] === r[1] && r[1] === r[2]) {
-    if (r[0] === "💎") return "JACKPOT";
-    return "BIG_WIN";
+// 📦 COMPONENT LOADER (NAVBAR + FOOTER)
+function loadComponents() {
+  const navbar = document.getElementById("navbar");
+  const footer = document.getElementById("footer");
+
+  if (navbar) {
+    fetch("../components/navbar.html")
+      .then(r => r.text())
+      .then(data => {
+        navbar.innerHTML = data;
+      });
   }
 
-  if (r[0] === r[1] || r[1] === r[2] || r[0] === r[2]) {
-    return "SMALL_WIN";
-  }
-
-  return "LOSE";
-}
-
-// 🎰 SPIN FUNCTION (MAIN ENGINE)
-let spinning = false;
-
-function spin() {
-  if (spinning) return;
-  spinning = true;
-
-  unlockAudio();
-  play(Sound.spin);
-
-  let count = 0;
-
-  // fake animation effect (fast spin)
-  const interval = setInterval(() => {
-    document.querySelectorAll(".reel").forEach((el) => {
-      el.innerText = weightedSymbol();
-    });
-
-    count++;
-    if (count > 12) clearInterval(interval);
-  }, 80);
-
-  // stop spin
-  setTimeout(() => {
-    const result = generateReels();
-
-    const reels = document.querySelectorAll(".reel");
-    reels[0].innerText = result[0];
-    reels[1].innerText = result[1];
-    reels[2].innerText = result[2];
-
-    const outcome = checkWin(result);
-
-    const resultText = document.getElementById("result");
-    const balanceEl = document.getElementById("balance");
-
-    let balance = parseInt(balanceEl.innerText);
-
-    if (outcome === "JACKPOT") {
-      resultText.innerText = "💎 JACKPOT WIN!";
-      play(Sound.jackpot);
-      balance += 2000;
-    } 
-    else if (outcome === "BIG_WIN") {
-      resultText.innerText = "🔥 BIG WIN!";
-      play(Sound.win);
-      balance += 300;
-    } 
-    else if (outcome === "SMALL_WIN") {
-      resultText.innerText = "✨ SMALL WIN";
-      play(Sound.win);
-      balance += 100;
-    } 
-    else {
-      resultText.innerText = "❌ LOSE";
-      balance -= 50;
-    }
-
-    balanceEl.innerText = balance;
-
-    spinning = false;
-  }, 1500);
-}
-
-// 🎵 START MUSIC
-function startMusic() {
-  if (Sound.bg) {
-    Sound.bg.loop = true;
-    Sound.bg.volume = 0.3;
-    Sound.bg.play().catch(() => {});
+  if (footer) {
+    fetch("../components/footer.html")
+      .then(r => r.text())
+      .then(data => {
+        footer.innerHTML = data;
+      });
   }
 }
 
-// 📱 FIRST TOUCH UNLOCK
-document.addEventListener("click", () => {
-  unlockAudio();
-  startMusic();
-}, { once: true });
+// 🚀 INIT ON PAGE LOAD
+window.addEventListener("load", () => {
+  loadComponents();
+});
