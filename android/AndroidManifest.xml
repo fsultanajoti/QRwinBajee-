@@ -4,12 +4,10 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:label="QRwinBajee"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        android:usesCleartextTraffic="true">
+        android:label="QrWinBajee Casino"
+        android:icon="@mipmap/ic_launcher">
 
-        <activity
-            android:name=".SplashActivity"
+        <activity android:name=".MainActivity"
             android:exported="true">
 
             <intent-filter>
@@ -18,10 +16,6 @@
             </intent-filter>
 
         </activity>
-
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"/>
 
     </application>
 
