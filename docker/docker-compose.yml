@@ -1,1 +1,36 @@
+version: "3.8"
 
+services:
+
+  backend:
+    build: ..
+    container_name: kingbajee_backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/kingbajee
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:6
+    container_name: kingbajee_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  frontend:
+    build: ../frontend
+    container_name: kingbajee_frontend
+    ports:
+      - "3000:3000"
+
+  admin:
+    build: ../admin
+    container_name: kingbajee_admin
+    ports:
+      - "3001:3000"
+
+volumes:
+  mongo_data:
