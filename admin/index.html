@@ -1,1 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QRwinBajee Admin</title>
 
+<style>
+body {
+  margin: 0;
+  background: radial-gradient(circle, #1a002b, #000);
+  color: white;
+  font-family: Arial;
+  text-align: center;
+}
+
+.container {
+  margin-top: 120px;
+}
+
+h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+p {
+  opacity: 0.7;
+}
+
+button {
+  margin-top: 20px;
+  padding: 15px 40px;
+  font-size: 18px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(45deg, #ff00cc, #6600ff);
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 0 15px purple;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>🔐 QRwinBajee ADMIN PANEL</h1>
+  <p>Control your Casino System</p>
+
+  <button onclick="goLogin()">ENTER ADMIN</button>
+
+</div>
+
+<script>
+function goLogin(){
+  window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>
